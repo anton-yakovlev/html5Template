@@ -1,3 +1,4 @@
-app/bower
+bower
 node_modules
 .idea
+static
