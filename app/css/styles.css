@@ -1,0 +1,21 @@
+body {
+    background: #ccc;
+}
+
+.wrapper {
+    position: relative;
+    min-height: 100%;
+    height: auto !important;
+    overflow: hidden;
+}
+
+.wrapper:after {
+    content: "";
+    height: 80px;
+    display: block;
+}
+
+.page-footer {
+    height: 80px;
+    margin-top: -80px;
+}
