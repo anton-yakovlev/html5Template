@@ -1,0 +1,9 @@
+@mixin vertical-gradient($color-one, $percent-one, $color-two, $percent-two) {
+  background: $color-one;
+  background: -moz-linear-gradient(top, $color-one $percent-one, $color-two $percent-two);
+  background: -webkit-linear-gradient(top, $color-one $percent-one, $color-two $percent-two);
+  background: -o-linear-gradient(top, $color-one $percent-one, $color-two $percent-two);
+  background: -ms-linear-gradient(top, $color-one $percent-one, $color-two $percent-two);
+  background: linear-gradient(to bottom, $color-one $percent-one, $color-two $percent-two);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$color-one', endColorstr='$color-two', GradientType=0);
+}

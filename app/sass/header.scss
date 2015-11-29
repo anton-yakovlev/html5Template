@@ -1,0 +1,92 @@
+.header {
+  height: 97px;
+  border-bottom: 7px solid #fff;
+  background: #727070;
+  position: relative;
+
+  &__logo {
+    margin-left: 100px;
+    height: 100%;
+    position: relative;
+  }
+
+  &__logo-image {
+    display: block;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  &__logo-hidden-text {
+    position: absolute;
+    opacity: 0;
+  }
+
+  &__socials {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 100px;
+  }
+}
+
+.socials {
+  padding: 0;
+  margin: 0;
+
+  &__item {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 12px;
+
+    &:last-of-type {
+      margin-right: 0;
+    }
+  }
+
+  &__item-link {
+    text-indent: -999px;
+    display: block;
+    overflow: hidden;
+
+    &_fb {
+      @include sprite($icon-fb);
+
+      &:hover,
+      &:active,
+      &:focus{
+        @include sprite($icon-fb-active);
+      }
+    }
+
+    &_vk {
+      @include sprite($icon-vk);
+
+      &:hover,
+      &:active,
+      &:focus{
+        @include sprite($icon-vk-active);
+      }
+    }
+
+    &_tw {
+      @include sprite($icon-tw);
+
+      &:hover,
+      &:active,
+      &:focus{
+        @include sprite($icon-tw-active);
+      }
+    }
+
+    &_gh {
+      @include sprite($icon-gh);
+
+      &:hover,
+      &:active,
+      &:focus{
+        @include sprite($icon-gh-active);
+      }
+    }
+  }
+}

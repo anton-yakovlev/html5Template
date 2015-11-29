@@ -1,0 +1,25 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+.wrapper {
+  min-height: 100%;
+  margin-bottom: -61px;
+  background: url('../img/site-background.jpg') no-repeat;
+  background-size: cover;
+
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+}
+
+.page-buffer {
+  height: 61px;
+}

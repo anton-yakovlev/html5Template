@@ -1,0 +1,4 @@
+.footer {
+  height: 61px;
+  @include vertical-gradient(#ffffff, 0%, #f0f0f0, 100%);
+}

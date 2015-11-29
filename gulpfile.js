@@ -8,7 +8,11 @@ var gulp = require('gulp'),
     minifyCss = require('gulp-minify-css'),
     autoprefixer = require('gulp-autoprefixer'),
     concat = require('gulp-concat'),
-    uglify = require('gulp-uglify');
+    uglify = require('gulp-uglify'),
+    spritesmith = require('gulp.spritesmith'),
+    buffer = require('vinyl-buffer'),
+    imagemin = require('gulp-imagemin'),
+    merge = require('merge-stream');
 
 
 //------ Clean ------//
@@ -54,6 +58,33 @@ gulp.task('js:scripts', function () {
         .pipe(browserSync.stream());
 });
 
+
+//------ Images ------//
+gulp.task('images', function () {
+    return gulp.src('./app/img/**/*.*')
+        .pipe(gulp.dest('./static/img/'))
+        .pipe(browserSync.stream());
+});
+
+gulp.task('sprite', function () {
+    var spriteData = gulp.src('./app/sprite/*.png').pipe(spritesmith({
+        imgName: 'sprite.png',
+        cssName: 'sprite.scss',
+        imgPath: '../img/sprite.png'
+    }));
+
+    var imgStream = spriteData.img
+        .pipe(buffer())
+        .pipe(imagemin())
+        .pipe(gulp.dest('./static/img/'));
+
+    var cssStream = spriteData.css
+        .pipe(gulp.dest('./app/sass'));
+
+    return merge(imgStream, cssStream);
+});
+
+
 //------ Html ------//
 gulp.task('minify-html', function () {
     var opts = {
@@ -84,14 +115,16 @@ gulp.task('watch', function () {
     gulp.watch('./app/sass/**/*.scss', ['css:sass']);
     gulp.watch('./app/**/*.html', ['minify-html']);
     gulp.watch('./app/js/**/*.js', ['js:scripts']);
+    gulp.watch('./app/img/**/*.{jpg,jpeg,png,svg}', ['images']);
+    gulp.watch('./app/sprite/**/*.png', ['sprite']);
 
     gulp.watch([
         './static/*.html',
         './static/js/**/*.js',
         './static/css/**/*.css',
-        './static/img/**/*.*'
+        './static/img/**/*.{jpg,jpeg,png,svg}'
     ]).on('change', browserSync.reload);
 });
 
-gulp.task('build', ['clean', 'css', 'js', 'minify-html']);
-gulp.task('default', ['clean', 'css', 'js', 'minify-html', 'server', 'watch']);
+gulp.task('build', ['clean', 'css', 'js', 'images', 'sprite', 'minify-html']);
+gulp.task('default', ['clean', 'css', 'js', 'images', 'sprite', 'minify-html', 'server', 'watch']);
