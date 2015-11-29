@@ -50,7 +50,8 @@ gulp.task('js:scripts', function () {
     return gulp.src('./app/js/**/*.js')
         .pipe(concat('script.min.js'))
         .pipe(uglify())
-        .pipe(gulp.dest('./static/js'));
+        .pipe(gulp.dest('./static/js'))
+        .pipe(browserSync.stream());
 });
 
 //------ Html ------//
@@ -82,6 +83,7 @@ gulp.task('server', function () {
 gulp.task('watch', function () {
     gulp.watch('./app/sass/**/*.scss', ['css:sass']);
     gulp.watch('./app/**/*.html', ['minify-html']);
+    gulp.watch('./app/js/**/*.js', ['js:scripts']);
 
     gulp.watch([
         './static/*.html',
