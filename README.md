@@ -1,9 +1,13 @@
 # Install
-git clone https://github.com/anton-yakovlev/html5-simple-template.git
+git clone https://github.com/anton-yakovlev/html5-template.git
 # Tasks
 * Gulp
 * Bower
-* Sass
+* Sass: concatination, minify
 * Browser-sync
-* CSS Autoprefixer
+* CSS: Autoprefixer, normalize
 * JS uglify, concatination
+* JS modernizer 2.8.3
+* JS Jquery 1.8
+* Sprite with gulp.spritesmith
+* HTML: minify html

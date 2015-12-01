@@ -2,7 +2,6 @@
 
 var gulp = require('gulp'),
     browserSync = require('browser-sync'),
-    clean = require('gulp-clean'),
     minifyHTML = require('gulp-minify-html'),
     sass = require('gulp-sass'),
     minifyCss = require('gulp-minify-css'),
@@ -12,13 +11,14 @@ var gulp = require('gulp'),
     spritesmith = require('gulp.spritesmith'),
     buffer = require('vinyl-buffer'),
     imagemin = require('gulp-imagemin'),
-    merge = require('merge-stream');
+    merge = require('merge-stream'),
+    rimraf = require('rimraf'),
+    runSequence = require('run-sequence');
 
 
 //------ Clean ------//
-gulp.task('clean', function () {
-    return gulp.src(['static', 'build'], {read: false})
-        .pipe(clean());
+gulp.task('clean', function (callback) {
+    rimraf('./static', callback);
 });
 
 
@@ -56,6 +56,12 @@ gulp.task('js:scripts', function () {
         .pipe(uglify())
         .pipe(gulp.dest('./static/js'))
         .pipe(browserSync.stream());
+});
+
+gulp.task('js:modernizr', function () {
+    return gulp.src('./bower/modernizr/modernizr.js')
+        .pipe(uglify())
+        .pipe(gulp.dest('./static/js'));
 });
 
 
@@ -126,5 +132,10 @@ gulp.task('watch', function () {
     ]).on('change', browserSync.reload);
 });
 
-gulp.task('build', ['clean', 'css', 'js', 'images', 'sprite', 'minify-html']);
-gulp.task('default', ['clean', 'css', 'js', 'images', 'sprite', 'minify-html', 'server', 'watch']);
+gulp.task('build', function(callback){
+    runSequence('clean', ['css', 'js', 'js:modernizr', 'images', 'sprite', 'minify-html'], callback);
+});
+
+gulp.task('default', function(callback){
+    runSequence('clean', ['css', 'js', 'js:modernizr', 'images', 'sprite', 'minify-html'], 'server', 'watch', callback);
+});
