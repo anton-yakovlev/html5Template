@@ -1,13 +1,14 @@
+# Html5 Template
 # Install
 git clone https://github.com/anton-yakovlev/html5-template.git
 # Tasks
 * Gulp
 * Bower
-* Sass: concatination, minify
 * Browser-sync
-* CSS: Autoprefixer, normalize
-* JS uglify, concatination
-* JS modernizer 2.8.3
-* JS Jquery 1.8
+* Styles: Sass, Autoprefixer, Normalize.css
+* JS: Jquery 1.8, modernizer 2.8.3, jquery-placeholder, bPopup
+* HTML: Jade
 * Sprite with gulp.spritesmith
-* HTML: minify html
+* Fonts copy
+* Images copy
+* Favicon copy

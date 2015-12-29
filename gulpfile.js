@@ -1,79 +1,163 @@
 'use strict';
 
+//--------------------------------------------------------------//
+//------ General variables ------//
 var gulp = require('gulp'),
-    browserSync = require('browser-sync'),
-    minifyHTML = require('gulp-minify-html'),
-    sass = require('gulp-sass'),
-    minifyCss = require('gulp-minify-css'),
-    autoprefixer = require('gulp-autoprefixer'),
-    concat = require('gulp-concat'),
-    uglify = require('gulp-uglify'),
-    spritesmith = require('gulp.spritesmith'),
-    buffer = require('vinyl-buffer'),
-    imagemin = require('gulp-imagemin'),
-    merge = require('merge-stream'),
+    plugins = require('gulp-load-plugins')(),
     rimraf = require('rimraf'),
+    browserSync = require('browser-sync'),
+    merge = require('merge-stream'),
+    buffer = require('vinyl-buffer'),
     runSequence = require('run-sequence');
 
 
-//------ Clean ------//
-gulp.task('clean', function (callback) {
-    rimraf('./static', callback);
-});
+//--------------------------------------------------------------//
+//------ Custom paths ------//
+var paths = {
+    prod: './prod/',
+    dev: './dev/',
+    bower: './bower/',
+    myScriptsSrc: './app/js/**/*.js',
+    jsDevTarget: './dev/js',
+    sassSrc: './app/sass/**/*.scss',
+    sassSrcFile: './app/sass/styles.scss',
+    cssDevTarget: './dev/css/',
+    imagesSrc: './app/img/**/*.{png,jpg,jpeg,gif, svg}',
+    imagesDevTarget: './dev/img',
+    faviconSrc: './app/favicon/**/*.{png,xml,json,svg,ico}',
+    faviconDevTarget: './dev/favicon',
+    spriteSrc: './app/sprite/**/*.png',
+    spriteImgDevTarget: './dev/img',
+    spriteCssDevTarget: './app/sass/',
+    fontsSrc: './app/fonts/**/*.{eot,svg,ttf,woff,woff2}',
+    fontsDevTarget: './dev/fonts',
+    jadeSrc: './app/jade/**/*.jade',
+    jadePagesSrc: './app/jade/pages/**/*.jade',
+    jadeDevTarget: './dev/'
+};
 
 
-//------ Styles ------//
-gulp.task('css', ['css:sass', 'css:normalize']);
+//--------------------------------------------------------------//
+//------ All Pipes ------//
+var pipes = {};
 
-gulp.task('css:sass', function () {
-    return gulp.src('./app/sass/styles.scss')
-        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
-        .pipe(autoprefixer({
-            browsers: ['last 2 versions']
+// Favicon
+pipes.favicon = function () {
+    return gulp.src(paths.faviconSrc)
+        .pipe(gulp.dest(paths.faviconDevTarget));
+};
+
+//------ SASS pipe------//
+pipes.sass = function () {
+    return gulp.src(paths.sassSrcFile)
+        .pipe(plugins.sass().on('error', plugins.sass.logError))
+        .pipe(plugins.autoprefixer({
+            browsers: ['last 2 versions', 'IE 8-9']
         }))
-        .pipe(gulp.dest('./static/css'))
+        .pipe(gulp.dest(paths.cssDevTarget))
         .pipe(browserSync.stream());
-});
+};
 
-gulp.task('css:normalize', function () {
-    return gulp.src('./bower/normalize-css/normalize.css')
-        .pipe(minifyCss({compatibility: 'ie8'}))
-        .pipe(gulp.dest('./static/css'));
-});
+//------ Normalize css pipe ------//
+pipes.normalize = function () {
+    return gulp.src(paths.bower + 'normalize-css/normalize.css')
+        .pipe(gulp.dest(paths.cssDevTarget));
+};
 
+//------ jQuery.js pipe ------//
+pipes.jquery = function () {
+    return gulp.src(paths.bower + '/jquery/jquery.js')
+        .pipe(gulp.dest(paths.jsDevTarget));
+};
 
-//------ JS ------//
-gulp.task('js', ['js:jquery', 'js:scripts']);
+//------ Modernizr.js pipe ------//
+pipes.modernizr = function () {
+    return gulp.src(paths.bower + 'modernizr/modernizr.js')
+        .pipe(gulp.dest(paths.jsDevTarget));
+};
 
-gulp.task('js:jquery', function () {
-    return gulp.src('./bower/jquery/jquery.min.js')
-        .pipe(gulp.dest('./static/js'));
-});
+//------ Placeholder jQuery pipe ------//
+pipes.placeholder = function () {
+    return gulp.src(paths.bower + 'jquery-placeholder/jquery.placeholder.js')
+        .pipe(gulp.dest(paths.jsDevTarget));
+};
 
-gulp.task('js:scripts', function () {
-    return gulp.src('./app/js/**/*.js')
-        .pipe(concat('script.min.js'))
-        .pipe(uglify())
-        .pipe(gulp.dest('./static/js'))
+//------ bPopup.js pipe ------//
+pipes.bpopup = function () {
+    return gulp.src(paths.bower + 'bPopup/jquery.bpopup.js')
+        .pipe(gulp.dest(paths.jsDevTarget));
+};
+
+//------ jQuery Validate pipe ------//
+pipes.jqValidate = function () {
+    return gulp.src(paths.bower + 'jquery-validation/dist/jquery.validate.js')
+        .pipe(gulp.dest(paths.jsDevTarget));
+};
+
+//------ My scripts pipe ------//
+pipes.myScripts = function () {
+    return gulp.src(paths.myScriptsSrc)
+        .pipe(gulp.dest(paths.jsDevTarget))
         .pipe(browserSync.stream());
-});
+};
 
-gulp.task('js:modernizr', function () {
-    return gulp.src('./bower/modernizr/modernizr.js')
-        .pipe(uglify())
-        .pipe(gulp.dest('./static/js'));
-});
-
-
-//------ Images ------//
-gulp.task('images', function () {
-    return gulp.src('./app/img/**/*.*')
-        .pipe(gulp.dest('./static/img/'))
+//------ Images pipe ------//
+pipes.images = function () {
+    return gulp.src(paths.imagesSrc)
+        .pipe(gulp.dest(paths.imagesDevTarget))
         .pipe(browserSync.stream());
+};
+
+//------ Fonts pipe ------//
+pipes.fonts = function () {
+    return gulp.src(paths.fontsSrc)
+        .pipe(gulp.dest(paths.fontsDevTarget));
+};
+
+//------ Jade pipe ------//
+pipes.jade = function () {
+    return gulp.src(paths.jadePagesSrc)
+        .pipe(plugins.jade({
+            pretty: true
+        }))
+        .pipe(gulp.dest(paths.jadeDevTarget))
+        .pipe(browserSync.stream());
+};
+
+
+//--------------------------------------------------------------//
+//------ All Tasks ------//
+
+
+//------ Favicon task ------//
+gulp.task('favicon', function () {
+    return pipes.favicon();
 });
 
+//------ Clean dev path task ------//
+gulp.task('clean', function (callback) {
+    rimraf(paths.dev, callback);
+});
+
+
+//------ All styles task ------//
+gulp.task('styles', function (callback) {
+    runSequence('sprite', 'styles:sass', 'styles:normalize', callback);
+});
+
+//------ SASS task ------//
+gulp.task('styles:sass', function () {
+    return pipes.sass();
+});
+
+//------ Normalize.css task ------//
+gulp.task('styles:normalize', function () {
+    return pipes.normalize();
+});
+
+//------ Sprite task ------//
 gulp.task('sprite', function () {
-    var spriteData = gulp.src('./app/sprite/*.png').pipe(spritesmith({
+    var spriteData = gulp.src(paths.spriteSrc).pipe(plugins.spritesmith({
         imgName: 'sprite.png',
         cssName: 'sprite.scss',
         imgPath: '../img/sprite.png'
@@ -81,61 +165,114 @@ gulp.task('sprite', function () {
 
     var imgStream = spriteData.img
         .pipe(buffer())
-        .pipe(imagemin())
-        .pipe(gulp.dest('./static/img/'));
+        .pipe(plugins.imagemin())
+        .pipe(gulp.dest(paths.imagesDevTarget));
 
     var cssStream = spriteData.css
-        .pipe(gulp.dest('./app/sass'));
+        .pipe(gulp.dest(paths.spriteCssDevTarget));
 
     return merge(imgStream, cssStream);
 });
 
 
-//------ Html ------//
-gulp.task('minify-html', function () {
-    var opts = {
-        conditionals: true,
-        spare: true
-    };
+//------ All js task ------//
+gulp.task('js', ['js:jquery', 'js:myScripts', 'js:modernizr', 'js:placeholder', 'js:bpopup', 'js:jqValidate']);
 
-    return gulp.src('./app/*.html')
-        .pipe(minifyHTML(opts))
-        .pipe(gulp.dest('./static/'))
-        .pipe(browserSync.stream());
+//------ jQuery.js task ------//
+gulp.task('js:jquery', function () {
+    return pipes.jquery();
+});
+
+//------ Modernizr.js task ------//
+gulp.task('js:modernizr', function () {
+    return pipes.modernizr();
+});
+
+//------ Placeholder jQuery task ------//
+gulp.task('js:placeholder', function () {
+    return pipes.placeholder();
+});
+
+//------ bPopup.js task ------//
+gulp.task('js:bpopup', function () {
+    return pipes.bpopup();
+});
+
+//------ jQuery Validate task ------//
+gulp.task('js:jqValidate', function () {
+    return pipes.jqValidate();
+});
+
+//------ My Scripts task ------//
+gulp.task('js:myScripts', function () {
+    pipes.myScripts();
 });
 
 
-//------ Server ------//
+//------ Images task ------//
+gulp.task('images', function () {
+    return pipes.images();
+});
+
+
+//------ Fonts task ------//
+gulp.task('fonts', function () {
+    return pipes.fonts();
+});
+
+
+//------ Jade task ------//
+gulp.task('jade', function () {
+    return pipes.jade();
+});
+
+
+//------ Server browser-sync task ------//
 gulp.task('server', function () {
     browserSync({
         port: 9000,
         server: {
-            baseDir: 'static'
+            baseDir: paths.dev
         }
     });
 });
 
 
-//------ Watch ------//
+//------ Watch task ------//
 gulp.task('watch', function () {
-    gulp.watch('./app/sass/**/*.scss', ['css:sass']);
-    gulp.watch('./app/**/*.html', ['minify-html']);
-    gulp.watch('./app/js/**/*.js', ['js:scripts']);
-    gulp.watch('./app/img/**/*.{jpg,jpeg,png,svg}', ['images']);
-    gulp.watch('./app/sprite/**/*.png', ['sprite']);
+    gulp.watch(paths.sassSrc, ['styles']);
+    gulp.watch(paths.jadeSrc, ['jade']);
+    gulp.watch(paths.myScriptsSrc, ['js:myScripts']);
+    gulp.watch(paths.imagesSrc, ['images']);
+    gulp.watch(paths.spriteSrc, ['styles']);
 
     gulp.watch([
-        './static/*.html',
-        './static/js/**/*.js',
-        './static/css/**/*.css',
-        './static/img/**/*.{jpg,jpeg,png,svg}'
+        paths.dev + '**/*.*'
     ]).on('change', browserSync.reload);
 });
 
-gulp.task('build', function(callback){
-    runSequence('clean', ['css', 'js', 'js:modernizr', 'images', 'sprite', 'minify-html'], callback);
+
+//------ Build project to dev task ------//
+gulp.task('build', function (callback) {
+    runSequence('clean', ['styles', 'js', 'images', 'fonts', 'favicon', 'jade'], callback);
 });
 
-gulp.task('default', function(callback){
-    runSequence('clean', ['css', 'js', 'js:modernizr', 'images', 'sprite', 'minify-html'], 'server', 'watch', callback);
+
+//------ Build project to dev and start server task ------//
+gulp.task('default', function (callback) {
+    runSequence('clean', ['build'], 'server', 'watch', callback);
 });
+
+
+//------ Pretty error view ------//
+var log = function (error) {
+    console.log([
+        '',
+        "----------ERROR MESSAGE START----------",
+        ("[" + error.name + " in " + error.plugin + "]"),
+        error.message,
+        "----------ERROR MESSAGE END----------",
+        ''
+    ].join('\n'));
+    this.end();
+};

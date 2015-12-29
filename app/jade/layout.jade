@@ -1,0 +1,30 @@
+doctype html
+html(lang="ru-RU")
+    head
+        include common/head
+    body
+
+        <!--[if lt IE 8]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+        your browser</a> to improve your about-list.</p>
+        <![endif]-->
+
+        .wrapper
+            include common/header
+
+            .container
+                aside.aside
+                    .aside__nav
+                        | Navigation
+
+                .page-content
+                    block content
+
+            .buffer
+
+        include common/footer
+
+        script(src="js/jquery.js")
+        <!--[if lte IE 9]><script src="js/jquery.placeholder.js"></script><![endif]-->
+        script(src="js/jquery.bpopup.js")
+        script(src="js/script.js")
