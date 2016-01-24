@@ -1,6 +1,6 @@
 # Html5 Template
 # Install
-git clone https://github.com/anton-yakovlev/html5-template.git
+git clone https://github.com/anton-yakovlev/html5Template
 # Tasks
 * Gulp
 * Bower
