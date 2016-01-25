@@ -144,7 +144,7 @@ gulp.task('styles:sass-dev', function () {
     return gulp.src(paths(gPaths.dev).sass.files)
         .pipe(plugins.plumber())
         .pipe(plugins.sass().on('error', plugins.sass.logError))
-        .pipe(plugins.concatCss('styles.css'))
+        .pipe(plugins.concat('styles.css'))
         .pipe(plugins.autoprefixer({
             browsers: ['last 2 versions', 'IE 8-9']
         }))
@@ -179,7 +179,7 @@ gulp.task('js:vendors-dev', function(){
         .pipe(plugins.plumber())
         .pipe(plugins.order(paths(gPaths.dev).js.order))
         .pipe(plugins.concat('vendors.js'))
-        .pipe(gulp.dest(paths(gPaths.dev).js.dest))
+        .pipe(gulp.dest(paths(gPaths.dev).js.dest));
 });
 
 //------ Modernizr.js ------//
@@ -194,14 +194,14 @@ gulp.task('js:myScripts-dev', function () {
     return gulp.src(paths(gPaths.dev).js.src)
         .pipe(plugins.plumber())
         .pipe(plugins.concat('scripts.js'))
-        .pipe(gulp.dest(paths(gPaths.dev).js.dest))
+        .pipe(gulp.dest(paths(gPaths.dev).js.dest));
 });
 
 //------ Images ------//
 gulp.task('images-dev', function () {
     return gulp.src(paths(gPaths.dev).img.src)
         .pipe(plugins.plumber())
-        .pipe(gulp.dest(paths(gPaths.dev).img.dest))
+        .pipe(gulp.dest(paths(gPaths.dev).img.dest));
 });
 
 //------ Fonts ------//
@@ -218,7 +218,7 @@ gulp.task('jade-dev', function () {
         .pipe(plugins.jade({
             pretty: true
         }))
-        .pipe(gulp.dest(gPaths.dev))
+        .pipe(gulp.dest(gPaths.dev));
 });
 
 //------ Server browser-sync ------//
@@ -315,12 +315,12 @@ gulp.task('styles:sass-prod', function () {
     return gulp.src(paths(gPaths.prod).sass.files)
         .pipe(plugins.plumber())
         .pipe(plugins.sass().on('error', plugins.sass.logError))
-        .pipe(plugins.concatCss('styles.css'))
+        .pipe(plugins.concat('styles.css'))
         .pipe(plugins.autoprefixer({
             browsers: ['last 2 versions', 'IE 8-9']
         }))
         .pipe(plugins.cssnano())
-        .pipe(gulp.dest(paths(gPaths.prod).sass.dest))
+        .pipe(gulp.dest(paths(gPaths.prod).sass.dest));
 });
 
 //------ Sprite ------//
@@ -352,7 +352,7 @@ gulp.task('js:vendors-prod', function(){
         .pipe(plugins.order(paths(gPaths.prod).js.order))
         .pipe(plugins.concat('vendors.js'))
         .pipe(plugins.uglify())
-        .pipe(gulp.dest(paths(gPaths.prod).js.dest))
+        .pipe(gulp.dest(paths(gPaths.prod).js.dest));
 });
 
 //------ Modernizr.js ------//
@@ -369,14 +369,14 @@ gulp.task('js:myScripts-prod', function () {
         .pipe(plugins.plumber())
         .pipe(plugins.concat('scripts.js'))
         .pipe(plugins.uglify())
-        .pipe(gulp.dest(paths(gPaths.prod).js.dest))
+        .pipe(gulp.dest(paths(gPaths.prod).js.dest));
 });
 
 //------ Images ------//
 gulp.task('images-prod', function () {
     return gulp.src(paths(gPaths.prod).img.src)
         .pipe(plugins.plumber())
-        .pipe(gulp.dest(paths(gPaths.prod).img.dest))
+        .pipe(gulp.dest(paths(gPaths.prod).img.dest));
 });
 
 //------ Fonts ------//
@@ -391,7 +391,7 @@ gulp.task('jade-prod', function () {
     return gulp.src(paths(gPaths.prod).jade.srcPages)
         .pipe(plugins.plumber())
         .pipe(plugins.jade())
-        .pipe(gulp.dest(gPaths.prod))
+        .pipe(gulp.dest(gPaths.prod));
 });
 
 //------ Build project to prod ------//
