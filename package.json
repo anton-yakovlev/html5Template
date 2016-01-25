@@ -1,23 +1,31 @@
 {
-  "name": "html5-template",
+  "name": "html5Template",
   "repository": {
     "type": "git",
-    "url": "git@github.com:anton-yakovlev/html5-template.git"
+    "url": "git@github.com:anton-yakovlev/html5Template.git"
   },
   "version": "1.0.0",
+  "author": "Anton Yakovlev",
+  "license": "ISC",
   "devDependencies": {
     "browser-sync": "^2.10.0",
+    "del": "^2.2.0",
     "gulp": "^3.9.0",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-concat-css": "^2.2.0",
+    "gulp-cssnano": "^2.1.0",
+    "gulp-imagemin": "^2.4.0",
     "gulp-jade": "^1.1.0",
     "gulp-load-plugins": "^1.1.0",
-    "jade": "^1.11.0",
-    "run-sequence": "^1.1.5",
-    "gulp-autoprefixer": "^3.1.0",
-    "gulp-imagemin": "^2.4.0",
+    "gulp-order": "^1.1.1",
+    "gulp-plumber": "^1.0.1",
+    "gulp-real-favicon": "^0.2.0",
     "gulp-sass": "^2.1.0",
+    "gulp-uglify": "^1.5.1",
     "gulp.spritesmith": "^6.0.0",
     "merge-stream": "^1.0.0",
-    "rimraf": "^2.4.4",
+    "run-sequence": "^1.1.5",
     "vinyl-buffer": "^1.0.0"
   },
   "dependencies": {}

@@ -1,4 +1,5 @@
-bower
+bower_components
 node_modules
 .idea
 dev
+prod
